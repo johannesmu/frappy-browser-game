@@ -92,7 +92,7 @@ function initGame() {
     //set onTick to be executed every tick of the timer
     timer.on("tick", onTick, this);
     //set the timer to run at 60fps
-    timer.setFPS(60);
+    timer.setFPS(120);
     //add a listener for everytime the stage is clicked/tapped
     stage.addEventListener("stagemousedown", onStageClick);
     //add a listener for everytime mouse/tap is released
@@ -164,7 +164,7 @@ function onKeyDown(e) {
 function onKeyUp() {
     mouseisdown = false;
 }
-
+//setup the player
 function setupPlayer() {
     var data = {
         images: ["assets/sprites/bird.png"],
@@ -220,7 +220,8 @@ function onTick() {
         showScore();
     }
     stage.update();
-    moveBackground("gamebg");
+    moveBackground("gamebg",1);
+    moveBackground('ground',4);
 }
 
 function killPlayer() {
@@ -282,7 +283,8 @@ function manageObstacles() {
         obstacle.x = width + 1;
         obstacles.push(obstacle);
         stage.addChildAt(obstacle, 0);
-    } else if (obstacles.length > 0) {
+    } 
+    else if (obstacles.length > 0) {
         //check if there are any obstacles
         //check all obstacles via "obstacles" array
         for (i = 0; i < obstacles.length; i++) {
@@ -371,7 +373,8 @@ function addScore() {
 function saveScore() {
     try {
         window.localStorage.setItem("highest", highscore);
-    } catch (err) {
+    } 
+    catch (err) {
         console.log("error saving score " + err);
     }
 }
@@ -382,27 +385,18 @@ function readScore() {
             storedscore = window.localStorage.getItem("highest");
             highscore = storedscore;
         }
-    } catch (err) {
+    } 
+    catch (err) {
         console.log("error reading score " + err);
     }
 }
 //animate background
 var bgposition = 0;
-function moveBackground(elm){
+function moveBackground(elm,speed){
     if (timer.getTicks() % 5 == 0) {
-        bgposition-=1;
+        bgposition -= speed;
         var position=bgposition+"px 0px";
         document.getElementById(elm).style.backgroundPosition=position; 
     }
 }
 //cordova stuff for the android app
-document.addEventListener("deviceready", function () {
-    //listen to the back button on Android
-    document.addEventListener("back", onBack);
-
-    function onBack() {
-        //save the score then exit app
-        saveScore();
-        navigator.app.exitApp();
-    }
-});
