@@ -220,8 +220,11 @@ function onTick() {
         showScore();
     }
     stage.update();
+  if(isalive == true ){
     moveBackground("gamebg",1);
     moveBackground('ground',4);
+  }
+    
 }
 
 function killPlayer() {
